@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wearable Devices</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Wearable Devices">
+  <meta name="author" content="Raj Ayala">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Wearable Devices</h1>
+    <h2>Modeling and Prediction of Human Activity</h2>
+    <p>Raj Ayala<br/>Coursera - Johns Hopkins School of Public Health</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Human Activity Recognition</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Wearable devices are becoming increasing popular as they find applications in personal fitness, healthcare, security, and other areas</li>
+<li>Jawbone and Fitbit are examples of personal fitness devices.</li>
+<li>Caring for recovering surgery patients and administer certain medications are healthcare applications.</li>
+<li>The underlying technology behind these applications is the ability to predict human activity (e.g., light sleep, deep sleep, walking, running, etc.), based on the data collected from the wearable devices.</li>
+<li>Typical devices built into wearables are the gyroscope and the accelerometer.</li>
+<li>These devices collect data pertaining variaous parameters, such as, x,y,z directional movements of a gyro band; x,y,z angular velocity measurements, etc.</li>
+<li>Once the data is collected, these parameters becomes predictors for recognizing human activity.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Building Data Models</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>First, you partition the collected data into training and test sets. Keep the test set aside and don&#39;t touch it until you have completed building the models and are ready for predictions on test data set.</li>
+<li>Explore the data to clean up any missing values, eliminate any &quot;near-zero-variance&quot; variables, and reduce dimensionality by looking at closely correlated variables.</li>
+<li>Then you can further partition the training data into training and test subsets. </li>
+<li>Choose some models to try out - we have chosen three
+
+<ul>
+<li>Random Forest (rf)</li>
+<li>Support Vector Machines (svm)</li>
+<li>kNearest Neighbors (kNN)</li>
+</ul></li>
+<li>We then use these models to make predictions against test data.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Predictions Against Test Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>From the shiny application (<a href="http://rajayala.shinyapps.io/WearableDevices">http://rajayala.shinyapps.io/WearableDevices</a>), we see that the predictions of the three models against 20 test cases are:</p>
+
+<pre><code class="r">## build data frame of predictions .. use out put of shiny apps, so that
+## we don&#39;t have to run th emodels here
+test.pred.rf &lt;- c(&quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,
+                  &quot;SLEEPING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;WALKING&quot;,
+                  &quot;SITTING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,  &quot;RUNNING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;, 
+                  &quot;SITTING&quot;,  &quot;SITTING&quot;)
+test.pred.rf &lt;- as.factor(test.pred.rf)
+test.pred.svm &lt;- c(&quot;WALKING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;SITTING&quot;,
+                   &quot;SLEEPING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;WALKING&quot;,
+                   &quot;SITTING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,  &quot;RUNNING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;,
+                   &quot;SITTING&quot;,  &quot;SITTING&quot;)
+test.pred.svm &lt;- as.factor(test.pred.svm)
+test.pred.knn &lt;- c(&quot;WALKING&quot;, &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,
+                   &quot;SLEEPING&quot;, &quot;RUNNING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;WALKING&quot;,
+                   &quot;WALKING&quot;, &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;,
+                   &quot;SITTING&quot;,  &quot;SITTING&quot;)
+test.pred.knn &lt;- as.factor(test.pred.knn)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>How the Predictions of different Models Compare to True Outcomes</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The right outcomes for the test set and how they compare with predictions from models are</p>
+
+<pre><code class="r">right_pred &lt;- c(&quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,
+                &quot;SLEEPING&quot;, &quot;SITTING&quot;,  &quot;STANDING&quot;, &quot;STANDING&quot;, &quot;SITTING&quot;,  &quot;WALKING&quot;,
+                &quot;SITTING&quot;, &quot;STANDING&quot;, &quot;RUNNING&quot;,  &quot;RUNNING&quot;,  &quot;STANDING&quot;, &quot;SITTING&quot;, 
+                &quot;SITTING&quot;,  &quot;SITTING&quot;)
+right_pred &lt;- as.factor(right_pred)
+pred.df &lt;- data.frame(rf.p = test.pred.rf, svm.p = test.pred.svm, knn.p = test.pred.knn)
+pred.df$right &lt;- with(pred.df, right_pred)
+head(pred.df, 4)
+</code></pre>
+
+<pre><code>##       rf.p    svm.p    knn.p    right
+## 1  SITTING  WALKING  WALKING  SITTING
+## 2 STANDING STANDING STANDING STANDING
+## 3  SITTING STANDING  SITTING  SITTING
+## 4 STANDING STANDING STANDING STANDING
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Accuracy of Predictions of Different Models</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>From the results, we see that the accuracy of the predictions of the three models is as follows:</p>
+
+<pre><code class="r">acc &lt;- data.frame(Model=c(&quot;Random Forest&quot;, &quot;SVM (radial)&quot;, &quot;KNN&quot;),
+          Accuracy = c(sum(test.pred.rf == right_pred)/20,
+                      sum(test.pred.svm == right_pred)/20,
+                      sum(test.pred.knn == right_pred)/20))
+acc
+</code></pre>
+
+<pre><code>##           Model Accuracy
+## 1 Random Forest      1.0
+## 2  SVM (radial)      0.8
+## 3           KNN      0.8
+</code></pre>
+
+<p>We see that Random Forest model yields almost 100% accuracy whereas SVM and kNN are runners-up at 80% performance.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>SUMMARY</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Model-building takes time and effort.</li>
+<li>Once you have the right model, predictions are fast. This is what makes the wearables a consumer hit.</li>
+<li>More consumers using wearables implies that there will be more data available for analysis.</li>
+<li>Data begets data, which leads to better future applications as we understand the big data.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Human Activity Recognition'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Building Data Models'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Predictions Against Test Data'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='How the Predictions of different Models Compare to True Outcomes'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Accuracy of Predictions of Different Models'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='SUMMARY'>
+         6
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
